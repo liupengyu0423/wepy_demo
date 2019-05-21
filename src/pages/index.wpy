@@ -1,0 +1,68 @@
+<template>
+  <view class="container">
+    <view class="like" @tap="likeFn">赞</view>
+    <LoginBox :shown.sync="showLoginBox"></LoginBox>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import {
+    Apis,
+    Http,
+    Login,
+    Utils
+  } from 'libs/interface'
+  import LoginBox from 'components/login_box'
+  import CommonMixins from 'mixins_common'
+  export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: '首页'
+    }
+    components = {
+      LoginBox
+    }
+
+    mixins = [CommonMixins]
+
+    data = {
+    }
+
+    methods = {
+      likeFn() {
+        Login.doLogin(this, () => {
+          (async function(page) {
+            this.showLoginBox = true
+            this.$apply()
+            await Http.request.get({
+              url: Apis.login
+            })
+          })(this)
+        })
+      }
+    //   handleViewTap: Utils.throttle(() => {
+    //     console.log('handleViewTap')
+    //   }, 1000, {leading: false})
+    }
+
+    async onLoad() {
+      console.log(`index onload ${this.showLoginBox}`)
+      // 页面全局判断登录
+      // Login.doLogin(this, () => {
+      //   this.showLoginBox = true
+      //   this.$apply()
+      // })
+    }
+  }
+</script>
+<style lang="scss" scoped>
+  @import '../css/base.scss';
+  .like {
+    width: 80rpx;
+    height: 80rpx;
+    text-align: center;
+    background-color: $redBgColor;
+    line-height: 80rpx;
+    color: $whiteColor;
+  }
+</style>

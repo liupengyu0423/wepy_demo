@@ -1,0 +1,67 @@
+<style lang="scss">
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+</style>
+
+<script>
+import wepy from 'wepy'
+import 'wepy-async-function'
+
+export default class extends wepy.app {
+  config = {
+    pages: [
+      'pages/index',
+      'pages/profile'
+    ],
+    window: {
+      backgroundTextStyle: 'light',
+      navigationBarBackgroundColor: '#fff',
+      navigationBarTitleText: 'WeChat',
+      navigationBarTextStyle: 'black'
+    },
+    tabBar: {
+      selectedColor: '#E2001E',
+      list: [
+        {
+          pagePath: 'pages/index',
+          text: '首页',
+          iconPath: 'img/tab-daohang-a.png',
+          selectedIconPath: 'img/tab-daohang-d.png',
+        },
+        {
+          pagePath: 'pages/profile',
+          text: '我',
+          iconPath: 'img/tab-wode-a.png',
+          selectedIconPath: 'img/tab-wode-d.png',
+        }
+      ]
+    }
+  }
+
+  globalData = {
+    // 便于管理
+    version: '1.0.0',
+    appName: 'wepy_demo',
+    // 用户信息
+    userInfo: null
+  }
+
+  constructor () {
+    super()
+    this.use('requestfix')
+  }
+
+  onLaunch (e) {
+    let curPage = e.path.replace('pages/', '')
+    console.log(`onLaunch启动统计, page is ${curPage}`)
+    this.globalData.userInfo = wx.getStorageSync('USER_INFO') || this.globalData.userInfo
+  }
+
+}
+</script>
